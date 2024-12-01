@@ -3,7 +3,7 @@
 A simple, interactive web application that generates random acts of kindness suggestions to make the world a better place, one small action at a time.
 
 ## 🌟 Live Demo
-Once you set up GitHub Pages, your site will be available at: `https://NeuralBloom.github.io/random-acts-of-kindness`
+(https://neuralbloom.github.io/random-acts-of-kindness/)
 
 ## 🎯 Purpose
 In today's fast-paced world, sometimes we need a little reminder to spread kindness. This project aims to:
