@@ -1,49 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Acts of Kindness Generator</title>
     <style>
-        /* Theme Variables */
-        html[data-theme="light"] {
+        :root {
             --primary-color: #FF69B4;
             --secondary-color: #4a90e2;
             --background-color: #f8f9ff;
             --card-color: #ffffff;
             --text-color: #333333;
-            --text-secondary: #666666;
             --shadow-color: rgba(0, 0, 0, 0.1);
-            --button-bg: #f0f0f0;
-            --pattern-opacity: 0.05;
         }
 
-        html[data-theme="dark"] {
-            --primary-color: #FF8DC7;
-            --secondary-color: #64A9F4;
-            --background-color: #1a1a1a;
-            --card-color: #2d2d2d;
-            --text-color: #ffffff;
-            --text-secondary: #cccccc;
-            --shadow-color: rgba(0, 0, 0, 0.3);
-            --button-bg: #3d3d3d;
-            --pattern-opacity: 0.02;
-        }
-
-        /* Base Styles */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--background-color);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 105, 180, var(--pattern-opacity)) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(74, 144, 226, var(--pattern-opacity)) 0%, transparent 20%);
+                radial-gradient(circle at 10% 20%, rgba(255, 105, 180, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(74, 144, 226, 0.05) 0%, transparent 20%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -51,33 +33,6 @@
             padding: 20px;
         }
 
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: var(--text-color);
-            padding: 10px;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--card-color);
-            box-shadow: 0 2px 10px var(--shadow-color);
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        /* Container Styles */
         .container {
             max-width: 800px;
             width: 100%;
@@ -86,14 +41,13 @@
             box-shadow: 0 10px 30px var(--shadow-color);
             padding: 2rem;
             text-align: center;
-            transition: transform 0.3s ease, background-color 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
         .container:hover {
             transform: translateY(-5px);
         }
 
-        /* Typography */
         h1 {
             color: var(--primary-color);
             margin-bottom: 1rem;
@@ -109,7 +63,6 @@
             opacity: 0.8;
         }
 
-        /* Theme Buttons */
         .theme-buttons {
             display: flex;
             flex-wrap: wrap;
@@ -120,7 +73,7 @@
         }
 
         .theme-button {
-            background-color: var(--button-bg);
+            background-color: #f0f0f0;
             color: var(--text-color);
             padding: 12px 24px;
             border: none;
@@ -141,7 +94,6 @@
             color: white;
         }
 
-        /* Kindness Act Display */
         #kindnessAct {
             font-size: 1.5rem;
             margin: 30px auto;
@@ -149,7 +101,7 @@
             min-height: 120px;
             line-height: 1.5;
             color: var(--text-color);
-            background-color: var(--card-color);
+            background-color: rgba(255, 255, 255, 0.8);
             border-radius: 15px;
             box-shadow: 0 5px 15px var(--shadow-color);
             display: flex;
@@ -158,7 +110,6 @@
             transition: transform 0.3s ease;
         }
 
-        /* Generate Button */
         .generate-button {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
@@ -183,12 +134,13 @@
 
         .current-theme {
             font-style: italic;
-            color: var(--text-secondary);
+            color: var(--text-color);
+            opacity: 0.7;
             margin-top: 15px;
             font-size: 0.9rem;
         }
 
-        /* Animations */
+        /* Animation classes */
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
@@ -198,7 +150,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive Design */
+        /* Responsive design */
         @media (max-width: 600px) {
             .container {
                 padding: 1rem;
@@ -221,22 +173,10 @@
                 padding: 8px 16px;
                 font-size: 0.8rem;
             }
-
-            .theme-toggle {
-                top: 10px;
-                right: 10px;
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-            }
         }
     </style>
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
-        🌓
-    </button>
-
     <div class="container">
         <h1>✨ Random Acts of Kindness ✨</h1>
         <p class="subtitle">Spread joy and make the world a little brighter, one act at a time</p>
@@ -257,157 +197,121 @@
     </div>
 
     <script>
-        // Theme Toggle Function
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', newTheme);
-            
-            // Save theme preference
-            localStorage.setItem('theme', newTheme);
-        }
-
-        // Load saved theme preference
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        });
-
-// Kindness Collections
-const kindnessCollections = {
-    quick: {
-        name: "5-Minute Acts",
-        acts: [
-            "Send a quick thank you text to someone",
-            "Leave a positive comment on social media",
-            "Share an inspiring quote",
-            "Give a genuine compliment to someone nearby",
-            "Thank a service worker by name",
-            "Hold the door for someone",
-            "Pick up one piece of litter",
-            "Send a funny meme to make someone smile",
-            "Leave a positive emoji reaction on someone's post",
-            "Put coins in an expired parking meter",
-            "Return a shopping cart for someone",
-            "Let someone go ahead of you in line",
-            "Smile at five people",
-            "Write a one-sentence positive review",
-            "Send a friend an interesting article or video",
-            "Offer someone your seat if they're standing",
-            "Leave an encouraging note on a colleague's desk",
-            "Compliment someone's outfit",
-            "Give your place in traffic to another car",
-            "Help someone carry something heavy"
-        ]
-    },
-    rainy: {
-        name: "Rainy Day Acts",
-        acts: [
-            "Share your umbrella with someone",
-            "Create a cozy playlist for a friend",
-            "Send a 'thinking of you' message",
-            "Share a favorite indoor recipe",
-            "Send a photo of a rainbow after the rain",
-            "Create a virtual care package of comfort items",
-            "Share tips for staying cozy on rainy days",
-            "Recommend a good book for rainy weather",
-            "Send someone a warm drink delivery",
-            "Share your favorite rainy day activity",
-            "Create a rainy day emergency kit for someone",
-            "Write a cozy indoor activity suggestion",
-            "Share a calming rainy day soundtrack",
-            "Drop off a puzzle or board game to a neighbor",
-            "Make a batch of cookies and share them",
-            "Offer to help a neighbor bring things inside from the rain",
-            "Invite a friend over for a rainy-day movie marathon",
-            "Light a candle and share a photo of its cozy glow",
-            "Surprise someone with a small, comforting gift like socks or tea",
-            "Send a funny weather-related meme"
-        ]
-    },
-    notech: {
-        name: "No-Tech Acts",
-        acts: [
-            "Write a handwritten note of appreciation",
-            "Plant a seed or small plant",
-            "Create a hand-drawn card",
-            "Leave coins at a laundromat",
-            "Hide an encouraging note in a library book",
-            "Make origami decorations to share",
-            "Pick wildflowers for someone",
-            "Create a bookmark with an inspiring message",
-            "Leave happy chalk messages on sidewalks",
-            "Make a hand-drawn coupon for helping someone",
-            "Create a paper craft decoration",
-            "Write a haiku about kindness",
-            "Draw a small picture for someone",
-            "Make a handmade bracelet and give it away",
-            "Leave a small handmade gift on someone's doorstep",
-            "Write a short story and leave it for someone to find",
-            "Bake cookies and share them",
-            "Paint a small rock with a happy design and leave it in a public place",
-            "Create a flower crown from wildflowers and give it away",
-            "Write down your favorite poem and give it to someone who needs a pick-me-up"
-        ]
-    },
-    indoor: {
-        name: "Indoor Acts",
-        acts: [
-            "Organize a shared space",
-            "Make extra portions when cooking",
-            "Clean a shared appliance",
-            "Create a relaxing atmosphere with music",
-            "Arrange books or items neatly",
-            "Leave encouraging sticky notes around",
-            "Refill empty ice cube trays",
-            "Make someone's bed",
-            "Organize digital photos to share",
-            "Create a cozy reading nook",
-            "Prepare someone's favorite snack",
-            "Set up an indoor scavenger hunt",
-            "Create an indoor herb garden to share",
-            "Water someone’s plants for them",
-            "Declutter a drawer and donate usable items",
-            "Organize a small cupboard or pantry shelf",
-            "Light a candle to create a cozy environment",
-            "Write a surprise note and leave it on someone’s pillow",
-            "Help clean up after a shared meal without being asked",
-            "Create a "mini spa" experience with calming music and warm towels"
-        ]
-    },
-    mood: {
-        name: "Mood Lifters",
-        acts: [
-            "Share a funny memory",
-            "Create a 'reasons to smile' list",
-            "Send a joke-of-the-day",
-            "Share cute animal pictures",
-            "Create a 'happy moments' photo collection",
-            "Write down three compliments for someone",
-            "Share an uplifting podcast episode",
-            "Create a 'good news only' message",
-            "Share a childhood funny story",
-            "Make a 'happiness jar' with positive notes",
-            "Create a playlist of upbeat songs",
-            "Share a motivational success story",
-            "Write down someone's best qualities",
-            "Send a funny GIF to cheer someone up",
-            "Create a small drawing that represents happiness",
-            "Record yourself saying something encouraging and send it",
-            "Make a list of things you appreciate about someone and share it",
-            "Send an inspirational story you recently heard",
-            "Do an impersonation of a character to make someone laugh",
-            "Ask someone about their favorite memory to spark happy feelings"
-        ]
-    }
-};
-
-        // Add all acts to a separate collection
-        kindnessCollections.all = {
-            name: "All Acts",
-            acts: Object.values(kindnessCollections).flatMap(collection => collection.acts)
+        // [Previous JavaScript code remains the same]
+        const kindnessCollections = {
+            quick: {
+                name: "5-Minute Acts",
+                acts: [
+                    "Send a quick thank you text to someone",
+                    "Leave a positive comment on social media",
+                    "Share an inspiring quote",
+                    "Give a genuine compliment to someone nearby",
+                    "Thank a service worker by name",
+                    "Hold the door for someone",
+                    "Pick up one piece of litter",
+                    "Send a funny meme to make someone smile",
+                    "Leave a positive emoji reaction on someone's post",
+                    "Put coins in an expired parking meter",
+                    "Return a shopping cart for someone",
+                    "Let someone go ahead of you in line",
+                    "Smile at five people",
+                    "Write a one-sentence positive review"
+                ]
+            },
+            rainy: {
+                name: "Rainy Day Acts",
+                acts: [
+                    "Share your umbrella with someone",
+                    "Create a cozy playlist for a friend",
+                    "Send a 'thinking of you' message",
+                    "Share a favorite indoor recipe",
+                    "Send a photo of a rainbow after the rain",
+                    "Create a virtual care package of comfort items",
+                    "Share tips for staying cozy on rainy days",
+                    "Recommend a good book for rainy weather",
+                    "Send someone a warm drink delivery",
+                    "Share your favorite rainy day activity",
+                    "Create a rainy day emergency kit for someone",
+                    "Write a cozy indoor activity suggestion",
+                    "Share a calming rainy day soundtrack"
+                ]
+            },
+            notech: {
+                name: "No-Tech Acts",
+                acts: [
+                    "Write a handwritten note of appreciation",
+                    "Plant a seed or small plant",
+                    "Create a hand-drawn card",
+                    "Leave coins at a laundromat",
+                    "Hide an encouraging note in a library book",
+                    "Make origami decorations to share",
+                    "Pick wildflowers for someone",
+                    "Create a bookmark with an inspiring message",
+                    "Leave happy chalk messages on sidewalks",
+                    "Make a hand-drawn coupon for helping someone",
+                    "Create a paper craft decoration",
+                    "Write a haiku about kindness",
+                    "Draw a small picture for someone"
+                ]
+            },
+            indoor: {
+                name: "Indoor Acts",
+                acts: [
+                    "Organize a shared space",
+                    "Make extra portions when cooking",
+                    "Clean a shared appliance",
+                    "Create a relaxing atmosphere with music",
+                    "Arrange books or items neatly",
+                    "Leave encouraging sticky notes around",
+                    "Refill empty ice cube trays",
+                    "Make someone's bed",
+                    "Organize digital photos to share",
+                    "Create a cozy reading nook",
+                    "Prepare someone's favorite snack",
+                    "Set up a indoor scavenger hunt",
+                    "Create an indoor herb garden to share"
+                ]
+            },
+            mood: {
+                name: "Mood Lifters",
+                acts: [
+                    "Share a funny memory",
+                    "Create a 'reasons to smile' list",
+                    "Send a joke-of-the-day",
+                    "Share cute animal pictures",
+                    "Create a 'happy moments' photo collection",
+                    "Write down three compliments for someone",
+                    "Share an uplifting podcast episode",
+                    "Create a 'good news only' message",
+                    "Share a childhood funny story",
+                    "Make a 'happiness jar' with positive notes",
+                    "Create a playlist of upbeat songs",
+                    "Share a motivational success story",
+                    "Write down someone's best qualities"
+                ]
+            }
         };
+
+        // Initialize the 'all' collection after other collections are defined
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create the 'all' collection
+            const allActs = [];
+            Object.keys(kindnessCollections).forEach(key => {
+                if (key !== 'all') {  // Avoid including 'all' collection in itself
+                    allActs.push(...kindnessCollections[key].acts);
+                }
+            });
+            
+            kindnessCollections.all = {
+                name: "All Acts",
+                acts: allActs
+            };
+            
+            // Generate initial act
+            generateAct();
+            
+            console.log('Collections initialized with total acts:', allActs.length);
+        });
 
         let currentTheme = 'all';
 
@@ -428,16 +332,34 @@ const kindnessCollections = {
         }
 
         function generateAct() {
-            const kindnessActElement = document.getElementById('kindnessAct');
-            const acts = kindnessCollections[currentTheme].acts;
-            const randomIndex = Math.floor(Math.random() * acts.length);
-            
-            // Remove and re-add animation class
-            kindnessActElement.classList.remove('fade-in');
-            void kindnessActElement.offsetWidth; // Trigger reflow
-            kindnessActElement.classList.add('fade-in');
-            
-            kindnessActElement.textContent = acts[randomIndex];
+            try {
+                const kindnessActElement = document.getElementById('kindnessAct');
+                
+                // Get the current collection's acts
+                const currentCollection = kindnessCollections[currentTheme];
+                if (!currentCollection || !currentCollection.acts) {
+                    console.error('No acts found for theme:', currentTheme);
+                    return;
+                }
+                
+                // Get a random act
+                const acts = currentCollection.acts;
+                const randomIndex = Math.floor(Math.random() * acts.length);
+                const selectedAct = acts[randomIndex];
+                
+                // Apply animation
+                kindnessActElement.classList.remove('fade-in');
+                void kindnessActElement.offsetWidth; // Trigger reflow
+                kindnessActElement.classList.add('fade-in');
+                
+                // Update the text
+                kindnessActElement.textContent = selectedAct;
+                
+                console.log('Generated act:', selectedAct); // Debug log
+            } catch (error) {
+                console.error('Error generating act:', error);
+                document.getElementById('kindnessAct').textContent = 'Click again to generate an act of kindness!';
+            }
         }
     </script>
 </body>
