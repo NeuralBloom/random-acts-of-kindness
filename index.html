@@ -177,6 +177,10 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+        🌓
+    </button>
+
     <div class="container">
         <h1>✨ Random Acts of Kindness ✨</h1>
         <p class="subtitle">Spread joy and make the world a little brighter, one act at a time</p>
@@ -197,7 +201,10 @@
     </div>
 
     <script>
-        // [Previous JavaScript code remains the same]
+        // Initialize current theme
+        let currentTheme = 'all';
+
+        // Define collections first
         const kindnessCollections = {
             quick: {
                 name: "5-Minute Acts",
@@ -206,16 +213,7 @@
                     "Leave a positive comment on social media",
                     "Share an inspiring quote",
                     "Give a genuine compliment to someone nearby",
-                    "Thank a service worker by name",
-                    "Hold the door for someone",
-                    "Pick up one piece of litter",
-                    "Send a funny meme to make someone smile",
-                    "Leave a positive emoji reaction on someone's post",
-                    "Put coins in an expired parking meter",
-                    "Return a shopping cart for someone",
-                    "Let someone go ahead of you in line",
-                    "Smile at five people",
-                    "Write a one-sentence positive review"
+                    "Thank a service worker by name"
                 ]
             },
             rainy: {
@@ -225,15 +223,7 @@
                     "Create a cozy playlist for a friend",
                     "Send a 'thinking of you' message",
                     "Share a favorite indoor recipe",
-                    "Send a photo of a rainbow after the rain",
-                    "Create a virtual care package of comfort items",
-                    "Share tips for staying cozy on rainy days",
-                    "Recommend a good book for rainy weather",
-                    "Send someone a warm drink delivery",
-                    "Share your favorite rainy day activity",
-                    "Create a rainy day emergency kit for someone",
-                    "Write a cozy indoor activity suggestion",
-                    "Share a calming rainy day soundtrack"
+                    "Send a photo of a rainbow after the rain"
                 ]
             },
             notech: {
@@ -243,15 +233,7 @@
                     "Plant a seed or small plant",
                     "Create a hand-drawn card",
                     "Leave coins at a laundromat",
-                    "Hide an encouraging note in a library book",
-                    "Make origami decorations to share",
-                    "Pick wildflowers for someone",
-                    "Create a bookmark with an inspiring message",
-                    "Leave happy chalk messages on sidewalks",
-                    "Make a hand-drawn coupon for helping someone",
-                    "Create a paper craft decoration",
-                    "Write a haiku about kindness",
-                    "Draw a small picture for someone"
+                    "Hide an encouraging note in a library book"
                 ]
             },
             indoor: {
@@ -261,15 +243,7 @@
                     "Make extra portions when cooking",
                     "Clean a shared appliance",
                     "Create a relaxing atmosphere with music",
-                    "Arrange books or items neatly",
-                    "Leave encouraging sticky notes around",
-                    "Refill empty ice cube trays",
-                    "Make someone's bed",
-                    "Organize digital photos to share",
-                    "Create a cozy reading nook",
-                    "Prepare someone's favorite snack",
-                    "Set up a indoor scavenger hunt",
-                    "Create an indoor herb garden to share"
+                    "Arrange books or items neatly"
                 ]
             },
             mood: {
@@ -279,44 +253,60 @@
                     "Create a 'reasons to smile' list",
                     "Send a joke-of-the-day",
                     "Share cute animal pictures",
-                    "Create a 'happy moments' photo collection",
-                    "Write down three compliments for someone",
-                    "Share an uplifting podcast episode",
-                    "Create a 'good news only' message",
-                    "Share a childhood funny story",
-                    "Make a 'happiness jar' with positive notes",
-                    "Create a playlist of upbeat songs",
-                    "Share a motivational success story",
-                    "Write down someone's best qualities"
+                    "Create a 'happy moments' photo collection"
                 ]
             }
         };
 
-        // Initialize the 'all' collection after other collections are defined
-        document.addEventListener('DOMContentLoaded', () => {
-            // Create the 'all' collection
-            const allActs = [];
-            Object.keys(kindnessCollections).forEach(key => {
-                if (key !== 'all') {  // Avoid including 'all' collection in itself
-                    allActs.push(...kindnessCollections[key].acts);
-                }
-            });
-            
-            kindnessCollections.all = {
-                name: "All Acts",
-                acts: allActs
-            };
-            
-            // Generate initial act
-            generateAct();
-            
-            console.log('Collections initialized with total acts:', allActs.length);
-        });
+        // Add all acts collection
+        kindnessCollections.all = {
+            name: "All Acts",
+            acts: []
+        };
 
-        let currentTheme = 'all';
+        // Combine all acts into the 'all' collection
+        for (const category in kindnessCollections) {
+            if (category !== 'all') {
+                kindnessCollections.all.acts.push(...kindnessCollections[category].acts);
+            }
+        }
+
+        function generateAct() {
+            console.log('Generate Act function called'); // Debug log
+            console.log('Current theme:', currentTheme); // Debug log
+            
+            const kindnessActElement = document.getElementById('kindnessAct');
+            if (!kindnessActElement) {
+                console.error('Kindness act element not found');
+                return;
+            }
+
+            const currentCollection = kindnessCollections[currentTheme];
+            if (!currentCollection) {
+                console.error('Collection not found for theme:', currentTheme);
+                return;
+            }
+
+            console.log('Number of acts in current collection:', currentCollection.acts.length); // Debug log
+            
+            const randomIndex = Math.floor(Math.random() * currentCollection.acts.length);
+            const selectedAct = currentCollection.acts[randomIndex];
+            
+            console.log('Selected act:', selectedAct); // Debug log
+
+            // Apply animation
+            kindnessActElement.classList.remove('fade-in');
+            void kindnessActElement.offsetWidth; // Trigger reflow
+            kindnessActElement.classList.add('fade-in');
+            
+            // Update the text
+            kindnessActElement.textContent = selectedAct;
+        }
 
         function setTheme(theme) {
+            console.log('Setting theme to:', theme); // Debug log
             currentTheme = theme;
+            
             // Update active button
             document.querySelectorAll('.theme-button').forEach(button => {
                 button.classList.remove('active');
@@ -324,43 +314,33 @@
                     button.classList.add('active');
                 }
             });
+            
             // Update theme display
             document.getElementById('currentTheme').textContent = 
                 theme === 'all' ? '' : `Current theme: ${kindnessCollections[theme].name}`;
+            
             // Generate new act for the theme
             generateAct();
         }
 
-        function generateAct() {
-            try {
-                const kindnessActElement = document.getElementById('kindnessAct');
-                
-                // Get the current collection's acts
-                const currentCollection = kindnessCollections[currentTheme];
-                if (!currentCollection || !currentCollection.acts) {
-                    console.error('No acts found for theme:', currentTheme);
-                    return;
-                }
-                
-                // Get a random act
-                const acts = currentCollection.acts;
-                const randomIndex = Math.floor(Math.random() * acts.length);
-                const selectedAct = acts[randomIndex];
-                
-                // Apply animation
-                kindnessActElement.classList.remove('fade-in');
-                void kindnessActElement.offsetWidth; // Trigger reflow
-                kindnessActElement.classList.add('fade-in');
-                
-                // Update the text
-                kindnessActElement.textContent = selectedAct;
-                
-                console.log('Generated act:', selectedAct); // Debug log
-            } catch (error) {
-                console.error('Error generating act:', error);
-                document.getElementById('kindnessAct').textContent = 'Click again to generate an act of kindness!';
-            }
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
         }
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM Content Loaded'); // Debug log
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Log initial state
+            console.log('Initial theme:', savedTheme);
+            console.log('Number of acts in all collection:', kindnessCollections.all.acts.length);
+        });
     </script>
 </body>
 </html>
